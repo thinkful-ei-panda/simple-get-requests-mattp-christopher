@@ -1,7 +1,7 @@
 'use-strict';
 
 function getDogImage(value) {
-  console.log(value)
+  console.log(value);
   fetch(`https://dog.ceo/api/breeds/image/random/${value}`)
     .then(response => response.json())
     .then(responseJson => 
@@ -12,8 +12,10 @@ function getDogImage(value) {
 function displayResults(responseJson) {
   console.log(responseJson);
   //replace the existing image with the new one
-  $('.results-img').replaceWith(
-    `<img src="${responseJson.message}" class="results-img">`
+  responseJson.message.forEach(
+    $('#js-results').append(
+      `<img src="${responseJson.message}" class="results-img">`
+    )
   );
   //display the results section
   $('.results').removeClass('hidden');
