@@ -1,39 +1,29 @@
-'use-strict';
 
-function getDogImage(value) {
-  console.log(value);
-  fetch(`https://dog.ceo/api/breeds/image/random/${value}`)
-    .then(response => response.json())
-    .then(responseJson => 
-      displayResults(responseJson))
-    .catch(error => alert('Something went wrong. Try again later.'));
+function getDogImage(numberOfDogs, typeOfDog) {
+  fetch(`https://dog.ceo/api/breed/${typeOfDog}/images/random/${numberOfDogs}`)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      displayResults(responseJson);
+    })
+    .catch((error) => console.log('nope, something went wrong'));
 }
 
-function displayResults(responseJson) {
-  console.log(responseJson);
-  //replace the existing image with the new one
-  responseJson.message.forEach(
-    $('#js-results').append(
-      `<img src="${responseJson.message}" class="results-img">`
-    )
-  );
-  //display the results section
-  $('.results').removeClass('hidden');
-}
-
-
-function watchForm() {
-  $('form').submit(event => {
+function whatchSubmit() {
+  $('body').on('submit', 'form', (event) => {
     event.preventDefault();
-    const value = $('#js-input').val();
-    console.log(value)
-    getDogImage(value);
+    const numberOfDogs = $('#js-input-num').val();
+    const typeOfDog = $('#js-input-breed').val();
+    console.log(typeOfDog)
+    getDogImage(numberOfDogs, typeOfDog);
   });
 }
 
-$(function() {
-  console.log('App loaded! Waiting for submit!');
-  watchForm();
-});
+function displayResults(responseJson) {
+  let imgArr = responseJson.message;
+  $('#results').empty();
+  imgArr.forEach((img) => {
+    $('#results').append(`<img src="${img}" class="img-result"/>`);
+  });
+}
 
-$(getDogImage);
+$(whatchSubmit);
